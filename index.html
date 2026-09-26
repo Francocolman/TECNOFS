@@ -1,0 +1,3316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0d2340">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/svg+xml" href="./icon.svg">
+<link rel="apple-touch-icon" href="./icon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TECNO FS">
+<meta name="description" content="Control financiero personal de TECNO FS">
+<title>TECNO FS — Control Financiero</title>
+<style>
+    /* ============================================================
+   TECNO FS — CONTROL FINANCIERO
+   Paleta: azul oscuro + blanco (identidad de marca)
+============================================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #f4f6f9;
+  --surface: #ffffff;
+  --surface-soft: #f8fafc;
+
+  --text: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+
+  --border: #e2e8f0;
+  --border-soft: #eef2f6;
+
+  --primary: #0d2340;
+  --primary-light: #16345a;
+  --accent: #2674b9;
+  --accent-soft: #e8f1f9;
+
+  --income: #16a34a;
+  --income-soft: #e7f6ed;
+  --expense: #dc2626;
+  --expense-soft: #fdeaea;
+
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.05);
+  --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 18px 50px rgba(15, 23, 42, 0.18);
+
+  --radius-sm: 10px;
+  --radius: 14px;
+  --radius-lg: 20px;
+
+  --sidebar-width: 260px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button, input, select, textarea { font: inherit; }
+button { border: 0; cursor: pointer; background: transparent; color: inherit; }
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(38, 116, 185, 0.25);
+  outline-offset: 2px;
+}
+
+input, select, textarea { color: var(--text); }
+
+.hidden { display: none !important; }
+.income-text { color: var(--income) !important; }
+.expense-text { color: var(--expense) !important; }
+
+
+/* ============================================================
+   LOGIN
+============================================================ */
+.auth-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 20% 0%, #16345a 0%, transparent 55%),
+    radial-gradient(circle at 100% 100%, #0d2340 0%, transparent 55%),
+    #08121f;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 40px 32px 32px;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+
+.auth-logo svg {
+  width: 76px; height: 76px;
+  display: block; margin: 0 auto 18px;
+}
+
+.auth-title {
+  font-size: 26px;
+  letter-spacing: -0.5px;
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.auth-subtitle {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+#authForm { margin-top: 28px; text-align: left; }
+
+.auth-lock {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 12px;
+}
+
+.auth-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  background: var(--surface-soft);
+  border-radius: 12px;
+  font-size: 15px;
+  text-align: center;
+  letter-spacing: 2px;
+  transition: all 0.15s ease;
+  margin-bottom: 10px;
+}
+
+.auth-input:focus {
+  border-color: var(--accent);
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(38, 116, 185, 0.12);
+}
+
+.auth-error {
+  color: var(--expense);
+  font-size: 12px;
+  text-align: center;
+  min-height: 18px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.auth-button {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 1px;
+  transition: 0.18s ease;
+}
+
+.auth-button:hover {
+  background: var(--primary-light);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+.auth-note {
+  margin-top: 22px;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   APP LAYOUT
+============================================================ */
+.app { min-height: 100vh; display: flex; }
+
+
+/* ============================================================
+   SIDEBAR
+============================================================ */
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  z-index: 100;
+  padding: 22px 14px;
+}
+
+.brand {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 10px 26px;
+}
+
+.brand-logo svg { width: 44px; height: 44px; display: block; }
+
+.brand-info strong { display: block; font-size: 17px; letter-spacing: -0.3px; }
+.brand-info span { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+.main-nav { display: flex; flex-direction: column; gap: 4px; }
+
+.nav-item {
+  width: 100%;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 13px;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-size: 14px; font-weight: 600;
+  text-align: left;
+  transition: 0.15s ease;
+}
+
+.nav-item:hover { background: var(--surface-soft); color: var(--text); }
+.nav-item.active { background: var(--accent-soft); color: var(--accent); }
+
+.nav-icon {
+  width: 22px; min-width: 22px;
+  display: flex; justify-content: center;
+  font-size: 17px;
+}
+
+.sidebar-bottom { margin-top: auto; }
+
+.logout-item { color: var(--expense); margin-top: 8px; }
+.logout-item:hover { background: var(--expense-soft); color: var(--expense); }
+
+.storage-status {
+  display: flex; align-items: center; gap: 9px;
+  margin: 16px 7px 4px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--income);
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.12);
+}
+
+.storage-status strong { display: block; font-size: 11px; }
+.storage-status small { font-size: 10px; color: var(--text-muted); }
+
+
+/* ============================================================
+   MAIN + TOPBAR
+============================================================ */
+.main {
+  margin-left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+.topbar {
+  height: 74px;
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px;
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.topbar-title h1 { font-size: 21px; letter-spacing: -0.4px; }
+.topbar-title p { color: var(--text-secondary); font-size: 12px; margin-top: 2px; }
+
+.topbar-actions { display: flex; align-items: center; gap: 8px; }
+
+.icon-button {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: var(--income);
+  color: #fff;
+  font-size: 26px; font-weight: 400;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: 0.15s ease;
+}
+
+.icon-button:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+.icon-button.expense-button { background: var(--expense); }
+
+.mobile-menu {
+  display: none;
+  width: 42px; height: 42px;
+  background: var(--surface-soft);
+  border-radius: 11px;
+  font-size: 20px;
+}
+
+
+/* ============================================================
+   PAGES
+============================================================ */
+.page {
+  display: none;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 26px 28px;
+}
+
+.page.active { display: block; }
+
+.page-header {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 20px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.page-header h2 { font-size: 24px; letter-spacing: -0.5px; }
+.page-header p { color: var(--text-secondary); font-size: 13px; margin-top: 4px; }
+
+.header-buttons { display: flex; gap: 8px; }
+
+
+/* ============================================================
+   PERIOD BAR
+============================================================ */
+.period-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+}
+
+.period-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
+  color: var(--text-muted); font-weight: 700;
+}
+
+.period-bar strong { font-size: 15px; margin-top: 3px; display: block; }
+
+.period-buttons {
+  display: flex; gap: 4px;
+  background: var(--surface-soft);
+  padding: 4px;
+  border-radius: 11px;
+}
+
+.period-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px; font-weight: 700;
+  transition: 0.15s ease;
+}
+
+.period-btn:hover { color: var(--text); }
+.period-btn.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
+
+
+/* ============================================================
+   BALANCE
+============================================================ */
+.balance-card {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 26px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+
+.balance-card-top {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.balance-label { font-size: 12px; color: #b8c9dd; letter-spacing: 0.4px; }
+.balance-card h2 { font-size: 34px; letter-spacing: -1px; margin-top: 6px; font-weight: 800; color: #fff; }
+
+.balance-icon {
+  width: 54px; height: 54px;
+  border-radius: 16px;
+  background: rgba(61, 143, 209, 0.18);
+  color: #6bb6f2;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 700;
+  border: 1px solid rgba(61, 143, 209, 0.3);
+}
+
+.balance-summary {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  padding-top: 20px;
+  align-items: center;
+}
+
+.summary-item { display: flex; flex-direction: column; gap: 8px; }
+.summary-item:first-child { padding-right: 22px; }
+.summary-item:last-child { padding-left: 22px; }
+
+.summary-divider { width: 1px; height: 100%; background: rgba(255, 255, 255, 0.15); }
+
+.summary-heading {
+  display: flex; align-items: center; gap: 7px;
+  color: #b8c9dd;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+
+.summary-arrow { font-size: 18px; }
+.summary-item strong { font-size: 20px; }
+
+.balance-card .income-text { color: #4ade80 !important; }
+.balance-card .expense-text { color: #fca5a5 !important; }
+
+
+/* ============================================================
+   QUICK ACTIONS
+============================================================ */
+.quick-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.quick-card {
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex; align-items: center; gap: 13px;
+  text-align: left;
+  transition: 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.quick-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+.income-card { background: var(--income-soft); border-color: #c9e9d6; color: #14803c; }
+.expense-card { background: var(--expense-soft); border-color: #f5d0d0; color: #b91c1c; }
+
+.quick-icon {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 400;
+  flex-shrink: 0;
+}
+
+.income-card .quick-icon { background: var(--income); color: #fff; }
+.expense-card .quick-icon { background: var(--expense); color: #fff; }
+
+.quick-card strong { display: block; font-size: 14px; }
+.quick-card span { display: block; font-size: 11px; opacity: 0.8; margin-top: 3px; }
+
+
+/* ============================================================
+   SECTION HEADING
+============================================================ */
+.section-heading {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 12px;
+  margin-top: 8px;
+}
+
+.section-heading h2 { font-size: 17px; letter-spacing: -0.3px; }
+.section-heading p { color: var(--text-muted); font-size: 12px; margin-top: 3px; }
+
+.text-button { color: var(--accent); font-weight: 700; font-size: 12px; }
+.text-button:hover { text-decoration: underline; }
+
+
+/* ============================================================
+   MOVEMENTS LIST
+============================================================ */
+.movement-list { display: flex; flex-direction: column; gap: 8px; }
+
+.movement-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 13px 15px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.movement-item:hover {
+  background: #fcfdfe;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.movement-icon {
+  width: 40px; height: 40px;
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px; font-weight: 700;
+  flex-shrink: 0;
+}
+
+.movement-item.income .movement-icon { background: var(--income-soft); color: var(--income); }
+.movement-item.expense .movement-icon { background: var(--expense-soft); color: var(--expense); }
+
+.movement-info { min-width: 0; flex: 1; }
+
+.movement-info strong {
+  display: block; font-size: 13px;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+
+.movement-info span {
+  display: block; color: var(--text-muted); font-size: 11px; margin-top: 3px;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+
+.movement-amount { font-weight: 800; font-size: 14px; white-space: nowrap; }
+.movement-item.income .movement-amount { color: var(--income); }
+.movement-item.expense .movement-amount { color: var(--expense); }
+
+.movement-date {
+  color: var(--text-muted); font-size: 10px;
+  min-width: 66px; text-align: right;
+}
+
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+.empty-state {
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.empty-state-icon {
+  width: 52px; height: 52px;
+  border-radius: 16px;
+  background: var(--surface-soft);
+  margin: 0 auto 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+}
+
+.empty-state h3 { color: var(--text); font-size: 15px; }
+.empty-state p { font-size: 12px; margin-top: 5px; }
+
+
+/* ============================================================
+   FILTERS
+============================================================ */
+.filters {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 170px 170px;
+  gap: 9px;
+  margin-bottom: 16px;
+}
+
+.search-box {
+  height: 42px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  display: flex; align-items: center; padding: 0 12px; gap: 8px;
+}
+
+.search-box > span { font-size: 20px; color: var(--text-muted); }
+.search-box input { width: 100%; border: 0; outline: 0; background: transparent; font-size: 12px; }
+
+.filters select {
+  height: 42px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 11px;
+  padding: 0 12px;
+  outline: 0;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+
+/* ============================================================
+   BUTTONS
+============================================================ */
+.primary-button, .secondary-button, .danger-button {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-size: 12px; font-weight: 700;
+  transition: 0.18s ease;
+  white-space: nowrap;
+}
+
+.primary-button { background: var(--primary); color: #fff; }
+.primary-button:hover { background: var(--primary-light); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+
+.secondary-button {
+  background: var(--surface-soft);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.secondary-button:hover { background: #eef2f6; }
+
+.danger-button { background: var(--expense); color: #fff; }
+.danger-button:hover { background: #b91c1c; transform: translateY(-1px); }
+
+
+/* ============================================================
+   CALENDAR
+============================================================ */
+.calendar-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+}
+
+.calendar-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.calendar-header h2 {
+  font-size: 17px;
+  text-transform: capitalize;
+  font-weight: 700;
+}
+
+.calendar-nav {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: var(--surface-soft);
+  font-size: 24px;
+  display: flex; align-items: center; justify-content: center;
+  transition: 0.15s ease;
+}
+
+.calendar-nav:hover { background: var(--accent-soft); color: var(--accent); }
+
+.calendar-weekdays, .calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-weekdays { margin-bottom: 8px; }
+
+.calendar-weekdays span {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.calendar-grid { gap: 5px; }
+
+.calendar-day {
+  min-height: 78px;
+  border-radius: 11px;
+  border: 1px solid transparent;
+  background: var(--surface-soft);
+  padding: 8px;
+  cursor: pointer;
+  display: flex; flex-direction: column;
+  transition: 0.15s ease;
+}
+
+.calendar-day:hover { border-color: var(--border); background: #fff; }
+.calendar-day.other-month { opacity: 0.35; }
+
+.calendar-day.today {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px rgba(38, 116, 185, 0.15);
+}
+
+.calendar-day.selected {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.calendar-number { font-size: 12px; font-weight: 800; }
+
+.calendar-day-totals {
+  margin-top: auto;
+  display: flex; flex-direction: column; gap: 2px;
+}
+
+.calendar-income { color: var(--income); font-size: 9px; font-weight: 700; }
+.calendar-expense { color: var(--expense); font-size: 9px; font-weight: 700; }
+
+
+/* ============================================================
+   SELECTED DAY
+============================================================ */
+.selected-day-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  min-height: 150px;
+  overflow: hidden;
+}
+
+.empty-selection {
+  min-height: 150px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 24px;
+}
+
+.empty-icon { font-size: 26px; margin-bottom: 7px; }
+.empty-selection h3 { font-size: 15px; }
+.empty-selection p { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+.day-panel-header {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.day-panel-header h3 { font-size: 15px; text-transform: capitalize; }
+.day-panel-header > strong { font-size: 16px; }
+
+.day-panel-summary {
+  display: flex; gap: 14px; margin-top: 5px;
+  font-size: 11px; color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+
+.day-panel-summary strong { font-size: 12px; }
+
+.day-movements { padding: 8px; display: flex; flex-direction: column; gap: 8px; }
+
+
+/* ============================================================
+   REPORTS
+============================================================ */
+.report-period {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.report-period-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 8px 13px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  transition: 0.15s ease;
+}
+
+.report-period-btn:hover { color: var(--text); }
+.report-period-btn.active { background: var(--primary); color: #fff; }
+
+.custom-range {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+  align-items: end;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.custom-range .form-group { gap: 5px; }
+.custom-range label { font-size: 11px; font-weight: 700; color: var(--text-secondary); }
+.custom-range input {
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0 12px;
+  background: var(--surface-soft);
+  font-size: 13px;
+  outline: 0;
+}
+
+.report-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.report-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+.report-card span { color: var(--text-secondary); font-size: 12px; display: block; }
+.report-card strong { display: block; font-size: 22px; margin-top: 8px; letter-spacing: -0.5px; }
+.report-card small { display: block; color: var(--text-muted); font-size: 11px; margin-top: 5px; }
+
+.report-card.highlight {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  border-color: transparent;
+  color: #fff;
+}
+
+.report-card.highlight span { color: #b8c9dd; }
+.report-card.highlight strong { color: #fff; }
+.report-card.highlight small { color: #8ba6c4; }
+
+
+/* ============================================================
+   CHART
+============================================================ */
+.chart-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow-sm);
+}
+
+.chart-legend {
+  display: flex; gap: 16px;
+  margin-bottom: 18px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.chart-legend .dot {
+  display: inline-block;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.income-dot { background: var(--income); }
+.expense-dot { background: var(--expense); }
+
+.chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 10px;
+  height: 200px;
+  padding-top: 10px;
+}
+
+.chart-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+}
+
+.chart-bars {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  width: 100%;
+  justify-content: center;
+}
+
+.chart-bar {
+  width: 18px;
+  border-radius: 5px 5px 2px 2px;
+  min-height: 3px;
+  transition: 0.2s ease;
+}
+
+.chart-bar.income { background: linear-gradient(180deg, #34d399, var(--income)); }
+.chart-bar.expense { background: linear-gradient(180deg, #f87171, var(--expense)); }
+
+.chart-label {
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+
+/* ============================================================
+   REPORT BREAKDOWN
+============================================================ */
+.report-breakdown {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.breakdown-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-soft);
+  gap: 12px;
+}
+
+.breakdown-row:last-child { border-bottom: 0; }
+.breakdown-row span { font-size: 12px; color: var(--text-secondary); }
+.breakdown-row strong { font-size: 13px; text-align: right; }
+
+
+/* ============================================================
+   SETTINGS
+============================================================ */
+.settings-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.settings-section h3 { font-size: 15px; margin-bottom: 6px; }
+.settings-note { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+
+.settings-form { display: grid; gap: 12px; max-width: 420px; }
+.settings-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.settings-section.danger { border-color: #f5d0d0; }
+.settings-section.danger h3 { color: var(--expense); }
+
+
+/* ============================================================
+   MODALS
+============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 18, 31, 0.6);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 20px;
+  z-index: 500;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  width: min(680px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  background: var(--surface);
+  border-radius: 22px;
+  box-shadow: var(--shadow-lg);
+  animation: modalIn 0.2s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+  padding: 22px 24px;
+  display: flex; justify-content: space-between; gap: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-label {
+  display: inline-block;
+  font-size: 9px; font-weight: 900;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.income-label { color: var(--income); }
+.expense-label { color: var(--expense); }
+
+.modal-header h2 { font-size: 19px; letter-spacing: -0.4px; }
+.modal-header p { color: var(--text-secondary); font-size: 11px; margin-top: 4px; }
+
+.modal-close {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: var(--surface-soft);
+  color: var(--text-secondary);
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.modal-close:hover { background: #eef2f6; }
+
+
+/* ============================================================
+   FORM
+============================================================ */
+form { padding: 22px 24px 0; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+
+.form-group label { font-size: 11px; font-weight: 800; color: var(--text); }
+.form-group label span { color: var(--text-muted); font-weight: 500; margin-left: 3px; }
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--surface-soft);
+  border-radius: 10px;
+  padding: 11px 12px;
+  outline: 0;
+  font-size: 13px;
+  transition: 0.15s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--accent);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(38, 116, 185, 0.1);
+}
+
+.form-group textarea { resize: vertical; min-height: 76px; }
+
+.money-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  background: var(--surface-soft);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: 0.15s ease;
+}
+
+.money-input:focus-within {
+  border-color: var(--accent);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(38, 116, 185, 0.1);
+}
+
+.money-input span {
+  padding-left: 12px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.money-input input {
+  border: 0;
+  background: transparent;
+  box-shadow: none !important;
+  border-radius: 0;
+  padding-left: 7px;
+  font-weight: 700;
+}
+
+.money-input input:focus { box-shadow: none !important; }
+
+
+/* ============================================================
+   PHOTO
+============================================================ */
+.photo-upload {
+  border: 1.5px dashed #cbd5e1;
+  background: #fafbfc;
+  border-radius: 13px;
+  min-height: 140px;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: 0.18s ease;
+}
+
+.photo-upload:hover { border-color: var(--accent); background: #f6faff; }
+
+.photo-placeholder {
+  min-height: 140px;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.photo-icon { font-size: 28px; margin-bottom: 6px; }
+.photo-placeholder strong { font-size: 12px; color: var(--text); }
+.photo-placeholder span { font-size: 10px; margin-top: 3px; }
+
+.photo-preview {
+  display: none;
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  background: #f5f6f7;
+}
+
+.photo-preview.visible { display: block; }
+.photo-placeholder.hidden { display: none; }
+
+.remove-photo {
+  display: none;
+  margin-top: 7px;
+  color: var(--expense);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.remove-photo.visible { display: inline-block; }
+
+
+/* ============================================================
+   MODAL FOOTER
+============================================================ */
+.modal-footer {
+  padding: 16px 24px 22px;
+  margin-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: flex-end; gap: 8px;
+}
+
+
+/* ============================================================
+   DETAIL MODAL
+============================================================ */
+.detail-modal { width: min(620px, 100%); }
+.detail-body { padding: 20px 24px; }
+
+.detail-main { display: flex; gap: 16px; margin-bottom: 18px; }
+
+.detail-photo {
+  width: 120px; height: 120px;
+  border-radius: 14px;
+  object-fit: cover;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+}
+
+.detail-photo.empty {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  font-size: 24px;
+}
+
+.detail-info { flex: 1; min-width: 0; }
+.detail-info h3 { font-size: 17px; }
+.detail-info p { color: var(--text-secondary); font-size: 12px; margin-top: 4px; }
+
+.detail-amount { font-size: 24px; font-weight: 900; margin-top: 12px; }
+.detail-amount.income { color: var(--income); }
+.detail-amount.expense { color: var(--expense); }
+
+.detail-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 4px 0;
+}
+
+.detail-field { padding: 11px 5px; }
+
+.detail-field span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 800;
+}
+
+.detail-field strong { display: block; font-size: 12px; margin-top: 3px; word-break: break-word; }
+
+.detail-notes {
+  margin-top: 14px;
+  background: var(--surface-soft);
+  border-radius: 11px;
+  padding: 12px;
+}
+
+.detail-notes span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 9px;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.detail-notes p { font-size: 11px; line-height: 1.5; margin-top: 5px; white-space: pre-wrap; }
+
+
+/* ============================================================
+   TOAST
+============================================================ */
+.toast {
+  position: fixed;
+  right: 20px; bottom: 20px;
+  min-width: 260px; max-width: 380px;
+  background: #0f172a;
+  color: #fff;
+  border-radius: 13px;
+  padding: 13px 15px;
+  display: none;
+  align-items: center;
+  gap: 11px;
+  box-shadow: var(--shadow-lg);
+  z-index: 900;
+  animation: toastIn 0.25s ease;
+}
+
+.toast.show { display: flex; }
+
+.toast-icon {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  background: var(--income);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.toast > div { display: flex; flex-direction: column; }
+.toast strong { font-size: 12px; }
+.toast span:last-child { font-size: 11px; color: #cbd5e1; margin-top: 2px; }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ============================================================
+   SIDEBAR OVERLAY
+============================================================ */
+.sidebar-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(8, 18, 31, 0.4);
+  z-index: 90;
+  backdrop-filter: blur(2px);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width: 1050px) {
+  .filters { grid-template-columns: 1fr 150px 150px; }
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: var(--shadow-lg);
+    z-index: 200;
+  }
+
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-overlay.open { display: block; }
+
+  .main { margin-left: 0; width: 100%; }
+
+  .topbar { height: 66px; padding: 0 14px; gap: 10px; }
+
+  .mobile-menu {
+    display: flex;
+    align-items: center; justify-content: center;
+  }
+
+  .topbar-title { flex: 1; min-width: 0; }
+  .topbar-title h1 { font-size: 18px; }
+  .topbar-title p { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .icon-button { width: 38px; height: 38px; font-size: 22px; border-radius: 10px; }
+
+  .page { padding: 18px 14px 30px; }
+
+  .period-bar { flex-direction: column; align-items: stretch; gap: 12px; }
+  .period-buttons { width: 100%; }
+  .period-btn { flex: 1; padding: 8px 4px; }
+
+  .balance-card { padding: 22px; }
+  .balance-card h2 { font-size: 30px; }
+
+  .report-cards { grid-template-columns: 1fr; }
+  .custom-range { grid-template-columns: 1fr 1fr; }
+  .custom-range button { grid-column: 1 / -1; }
+
+  .settings-form { max-width: 100%; }
+}
+
+@media (max-width: 560px) {
+  .balance-summary { grid-template-columns: 1fr; gap: 14px; }
+  .summary-divider { width: 100%; height: 1px; }
+  .summary-item:first-child, .summary-item:last-child { padding: 0; }
+
+  .quick-actions { grid-template-columns: 1fr; }
+
+  .movement-item { padding: 12px; gap: 10px; }
+  .movement-date { display: none; }
+  .movement-amount { font-size: 12px; }
+
+  .calendar-container { padding: 12px; }
+  .calendar-grid { gap: 3px; }
+  .calendar-day { min-height: 58px; padding: 6px; border-radius: 8px; }
+  .calendar-number { font-size: 11px; }
+  .calendar-income, .calendar-expense { font-size: 8px; }
+  .calendar-header h2 { font-size: 15px; }
+
+  .form-grid { grid-template-columns: 1fr; }
+  .form-group.full { grid-column: auto; }
+
+  .modal-overlay { padding: 0; align-items: flex-end; }
+  .modal { width: 100%; max-height: 94vh; border-radius: 20px 20px 0 0; }
+  .modal-header { padding: 18px; }
+  form { padding: 18px 18px 0; }
+  .modal-footer { padding: 14px 18px 18px; }
+  .modal-footer button { flex: 1; }
+
+  .detail-main { flex-direction: column; }
+  .detail-photo { width: 100%; height: 200px; }
+  .detail-fields { grid-template-columns: 1fr; }
+
+  .toast { left: 14px; right: 14px; bottom: 14px; min-width: 0; width: auto; }
+
+  .page-header { flex-direction: column; align-items: stretch; }
+  .header-buttons { width: 100%; }
+  .header-buttons button { flex: 1; }
+
+  .filters { grid-template-columns: 1fr 1fr; }
+  .search-box { grid-column: 1 / -1; }
+
+  .chart { height: 160px; gap: 6px; }
+  .chart-bar { width: 12px; }
+  .chart-label { font-size: 9px; }
+}
+
+@media (max-width: 380px) {
+  .page { padding-left: 10px; padding-right: 10px; }
+  .balance-card h2 { font-size: 26px; }
+  .calendar-income, .calendar-expense { display: none; }
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 20px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+::selection { background: #dbeafe; color: #0f172a; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     PANTALLA DE ACCESO
+============================================================ -->
+<div class="auth-screen" id="authScreen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <svg viewBox="0 0 80 80" aria-hidden="true">
+        <circle cx="40" cy="40" r="36" fill="#0d2340" stroke="#3d8fd1" stroke-width="3"/>
+        <rect x="28" y="18" width="24" height="44" rx="4" fill="none" stroke="#3d8fd1" stroke-width="2.5"/>
+        <circle cx="35" cy="34" r="2.2" fill="#3d8fd1"/>
+        <circle cx="45" cy="44" r="2.2" fill="#3d8fd1"/>
+        <circle cx="45" cy="26" r="2" fill="#3d8fd1"/>
+        <path d="M35 34 L45 44 M45 26 L35 34" stroke="#3d8fd1" stroke-width="1.6" fill="none"/>
+        <rect x="36" y="22" width="8" height="2" rx="1" fill="#3d8fd1"/>
+      </svg>
+    </div>
+    <h1 class="auth-title">TECNO FS</h1>
+    <p class="auth-subtitle">Control Financiero</p>
+
+    <form id="authForm" autocomplete="off">
+      <div class="auth-lock">🔒</div>
+
+      <label class="auth-label" id="authLabel">Ingresá tu contraseña</label>
+
+      <input
+        type="password"
+        id="authPassword"
+        class="auth-input"
+        placeholder="••••••••"
+        autocomplete="current-password"
+        required>
+
+      <input
+        type="password"
+        id="authPasswordConfirm"
+        class="auth-input hidden"
+        placeholder="Confirmá la contraseña"
+        autocomplete="new-password">
+
+      <p class="auth-error" id="authError"></p>
+
+      <button type="submit" class="auth-button" id="authSubmit">
+        INGRESAR
+      </button>
+    </form>
+
+    <p class="auth-note">
+      🔐 Acceso personal. Los datos se guardan solo en este dispositivo.
+    </p>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     APLICACIÓN
+============================================================ -->
+<div class="app hidden" id="app">
+
+  <!-- OVERLAY MOBILE -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 80 80" aria-hidden="true">
+          <circle cx="40" cy="40" r="36" fill="#0d2340" stroke="#3d8fd1" stroke-width="3"/>
+          <rect x="28" y="18" width="24" height="44" rx="4" fill="none" stroke="#3d8fd1" stroke-width="2.5"/>
+          <circle cx="35" cy="34" r="2.2" fill="#3d8fd1"/>
+          <circle cx="45" cy="44" r="2.2" fill="#3d8fd1"/>
+          <circle cx="45" cy="26" r="2" fill="#3d8fd1"/>
+          <path d="M35 34 L45 44 M45 26 L35 34" stroke="#3d8fd1" stroke-width="1.6" fill="none"/>
+        </svg>
+      </div>
+      <div class="brand-info">
+        <strong>TECNO FS</strong>
+        <span>Control financiero</span>
+      </div>
+    </div>
+
+    <nav class="main-nav">
+      <button class="nav-item active" data-page="inicio">
+        <span class="nav-icon">◫</span><span>Inicio</span>
+      </button>
+      <button class="nav-item" data-page="movimientos">
+        <span class="nav-icon">☰</span><span>Movimientos</span>
+      </button>
+      <button class="nav-item" data-page="calendario">
+        <span class="nav-icon">▦</span><span>Calendario</span>
+      </button>
+      <button class="nav-item" data-page="reportes">
+        <span class="nav-icon">◔</span><span>Reportes</span>
+      </button>
+      <button class="nav-item" data-page="configuracion">
+        <span class="nav-icon">⚙</span><span>Configuración</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <button class="nav-item logout-item" id="logoutBtn">
+        <span class="nav-icon">⎋</span><span>Cerrar sesión</span>
+      </button>
+      <div class="storage-status">
+        <span class="status-dot"></span>
+        <div>
+          <strong>Datos locales</strong>
+          <small>Guardado automático</small>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <button class="mobile-menu" id="mobileMenu" aria-label="Menú">☰</button>
+
+      <div class="topbar-title">
+        <h1 id="pageTitle">Balance</h1>
+        <p id="pageDescription">Controlá todo lo que entra y sale de TECNO FS.</p>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="icon-button" id="openIncomeTop" title="Nuevo ingreso">+</button>
+        <button class="icon-button expense-button" id="openExpenseTop" title="Nuevo egreso">−</button>
+      </div>
+    </header>
+
+    <!-- ============ PAGE: INICIO ============ -->
+    <section class="page active" id="page-inicio">
+
+      <div class="period-bar">
+        <div>
+          <span class="period-label">Período</span>
+          <strong id="currentPeriodLabel">Este mes</strong>
+        </div>
+        <div class="period-buttons">
+          <button class="period-btn" data-period="day">Hoy</button>
+          <button class="period-btn" data-period="week">Semana</button>
+          <button class="period-btn active" data-period="month">Mes</button>
+          <button class="period-btn" data-period="year">Año</button>
+          <button class="period-btn" data-period="all">Todo</button>
+        </div>
+      </div>
+
+      <div class="balance-card">
+        <div class="balance-card-top">
+          <div>
+            <span class="balance-label">Resultado del período</span>
+            <h2 id="balanceTotal">G. 0</h2>
+          </div>
+          <div class="balance-icon">₲</div>
+        </div>
+        <div class="balance-summary">
+          <div class="summary-item">
+            <div class="summary-heading"><span class="summary-arrow income-text">↗</span><span>Ingresos</span></div>
+            <strong id="totalIncome" class="income-text">G. 0</strong>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-item">
+            <div class="summary-heading"><span class="summary-arrow expense-text">↙</span><span>Egresos</span></div>
+            <strong id="totalExpense" class="expense-text">G. 0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <button class="quick-card income-card" id="newIncome">
+          <div class="quick-icon">+</div>
+          <div><strong>Nuevo ingreso</strong><span>Registrar reparación</span></div>
+        </button>
+        <button class="quick-card expense-card" id="newExpense">
+          <div class="quick-icon">−</div>
+          <div><strong>Nuevo egreso</strong><span>Registrar gasto</span></div>
+        </button>
+      </div>
+
+      <div class="section-heading">
+        <div>
+          <h2>Actividad reciente</h2>
+          <p>Últimos movimientos registrados</p>
+        </div>
+        <button class="text-button" data-page="movimientos">Ver todos →</button>
+      </div>
+
+      <div class="movement-list" id="recentList"></div>
+    </section>
+
+    <!-- ============ PAGE: MOVIMIENTOS ============ -->
+    <section class="page" id="page-movimientos">
+      <div class="page-header">
+        <div>
+          <h2>Movimientos</h2>
+          <p>Todos tus ingresos y egresos.</p>
+        </div>
+        <div class="header-buttons">
+          <button class="primary-button" id="newIncomeMovements">+ Ingreso</button>
+          <button class="danger-button" id="newExpenseMovements">− Egreso</button>
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="search-box">
+          <span>⌕</span>
+          <input type="search" id="movementSearch" placeholder="Buscar reparación, modelo, gasto...">
+        </div>
+        <select id="movementType">
+          <option value="all">Todos</option>
+          <option value="income">Ingresos</option>
+          <option value="expense">Egresos</option>
+        </select>
+        <select id="movementPeriod">
+          <option value="all">Todo el tiempo</option>
+          <option value="day">Hoy</option>
+          <option value="week">Esta semana</option>
+          <option value="month" selected>Este mes</option>
+          <option value="year">Este año</option>
+        </select>
+      </div>
+
+      <div class="movement-list" id="movementList"></div>
+    </section>
+
+    <!-- ============ PAGE: CALENDARIO ============ -->
+    <section class="page" id="page-calendario">
+      <div class="page-header">
+        <div>
+          <h2>Calendario</h2>
+          <p>Consultá tus ingresos y gastos por día.</p>
+        </div>
+      </div>
+
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <button class="calendar-nav" id="prevMonth">‹</button>
+          <h2 id="calendarMonth">—</h2>
+          <button class="calendar-nav" id="nextMonth">›</button>
+        </div>
+        <div class="calendar-weekdays">
+          <span>Lun</span><span>Mar</span><span>Mié</span>
+          <span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </div>
+
+      <div class="selected-day-panel" id="selectedDayPanel">
+        <div class="empty-selection">
+          <div class="empty-icon">📅</div>
+          <h3>Seleccioná un día</h3>
+          <p>Tocá una fecha para ver los movimientos registrados.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PAGE: REPORTES ============ -->
+    <section class="page" id="page-reportes">
+      <div class="page-header">
+        <div>
+          <h2>Reportes</h2>
+          <p>Analizá cómo estuvo tu negocio.</p>
+        </div>
+      </div>
+
+      <div class="report-period">
+        <button class="report-period-btn" data-report="day">Hoy</button>
+        <button class="report-period-btn" data-report="week">Semana</button>
+        <button class="report-period-btn active" data-report="month">Mes</button>
+        <button class="report-period-btn" data-report="year">Año</button>
+        <button class="report-period-btn" data-report="all">Todo</button>
+        <button class="report-period-btn" data-report="custom">Personalizado</button>
+      </div>
+
+      <div class="custom-range hidden" id="customRange">
+        <div class="form-group">
+          <label for="rangeFrom">Desde</label>
+          <input type="date" id="rangeFrom">
+        </div>
+        <div class="form-group">
+          <label for="rangeTo">Hasta</label>
+          <input type="date" id="rangeTo">
+        </div>
+        <button class="primary-button" id="applyRange">Aplicar</button>
+      </div>
+
+      <div class="report-cards">
+        <div class="report-card">
+          <span>Ingresos</span>
+          <strong id="reportIncome" class="income-text">G. 0</strong>
+          <small id="reportIncomeCount">0 movimientos</small>
+        </div>
+        <div class="report-card">
+          <span>Egresos</span>
+          <strong id="reportExpense" class="expense-text">G. 0</strong>
+          <small id="reportExpenseCount">0 movimientos</small>
+        </div>
+        <div class="report-card highlight">
+          <span>Resultado neto</span>
+          <strong id="reportBalance">G. 0</strong>
+          <small>Ingresos − Egresos</small>
+        </div>
+      </div>
+
+      <div class="section-heading">
+        <div>
+          <h2>Ingresos vs Egresos</h2>
+          <p>Últimos 6 meses</p>
+        </div>
+      </div>
+      <div class="chart-container">
+        <div class="chart-legend">
+          <span><i class="dot income-dot"></i> Ingresos</span>
+          <span><i class="dot expense-dot"></i> Egresos</span>
+        </div>
+        <div class="chart" id="chart"></div>
+      </div>
+
+      <div class="section-heading">
+        <div>
+          <h2>Resumen detallado</h2>
+          <p>Detalle del período seleccionado.</p>
+        </div>
+      </div>
+      <div class="report-breakdown" id="reportBreakdown"></div>
+    </section>
+
+    <!-- ============ PAGE: CONFIGURACIÓN ============ -->
+    <section class="page" id="page-configuracion">
+      <div class="page-header">
+        <div>
+          <h2>Configuración</h2>
+          <p>Seguridad, respaldo y datos.</p>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>🔐 Seguridad</h3>
+        <p class="settings-note">Cambiá tu contraseña de acceso.</p>
+        <form id="passwordForm" class="settings-form">
+          <div class="form-group">
+            <label for="currentPassword">Contraseña actual</label>
+            <input type="password" id="currentPassword" required autocomplete="current-password">
+          </div>
+          <div class="form-group">
+            <label for="newPassword">Nueva contraseña</label>
+            <input type="password" id="newPassword" required minlength="4" autocomplete="new-password">
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirmar nueva contraseña</label>
+            <input type="password" id="confirmPassword" required minlength="4" autocomplete="new-password">
+          </div>
+          <button type="submit" class="primary-button">Cambiar contraseña</button>
+        </form>
+      </div>
+
+      <div class="settings-section">
+        <h3>💾 Respaldo de datos</h3>
+        <p class="settings-note">Exportá o importá tus movimientos en formato JSON.</p>
+        <div class="settings-actions">
+          <button class="primary-button" id="exportData">↓ Exportar datos</button>
+          <button class="secondary-button" id="importData">↑ Importar datos</button>
+          <input type="file" id="importFile" accept=".json" hidden>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>🔓 Sesión</h3>
+        <p class="settings-note">Cerrá la sesión actual para volver a pedir contraseña.</p>
+        <button class="secondary-button" id="logoutBtn2">Cerrar sesión</button>
+      </div>
+
+      <div class="settings-section danger">
+        <h3>⚠ Zona peligrosa</h3>
+        <p class="settings-note">Elimina permanentemente todos tus movimientos.</p>
+        <button class="danger-button" id="resetData">Borrar todos los datos</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+
+<!-- ============================================================
+     MODAL: INGRESO
+============================================================ -->
+<div class="modal-overlay" id="incomeModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <span class="modal-label income-label">NUEVO INGRESO</span>
+        <h2 id="incomeModalTitle">Registrar reparación</h2>
+        <p>Guardá el dinero que recibiste por el servicio.</p>
+      </div>
+      <button class="modal-close" data-close="incomeModal">×</button>
+    </div>
+
+    <form id="incomeForm">
+      <input type="hidden" id="incomeId">
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="incomeDate">Fecha</label>
+          <input type="date" id="incomeDate" required>
+        </div>
+
+        <div class="form-group">
+          <label for="incomeAmount">Monto cobrado</label>
+          <div class="money-input">
+            <span>G.</span>
+            <input type="text" inputmode="numeric" id="incomeAmount" placeholder="0" required>
+          </div>
+        </div>
+
+        <div class="form-group full">
+          <label for="incomeService">Tipo de reparación</label>
+          <input type="text" id="incomeService" placeholder="Ej.: Cambio de display" required>
+        </div>
+
+        <div class="form-group">
+          <label for="incomeBrand">Marca</label>
+          <input type="text" id="incomeBrand" placeholder="Ej.: Samsung">
+        </div>
+
+        <div class="form-group">
+          <label for="incomeModel">Modelo</label>
+          <input type="text" id="incomeModel" placeholder="Ej.: Galaxy A13">
+        </div>
+
+        <div class="form-group">
+          <label for="incomeLocation">Modalidad</label>
+          <select id="incomeLocation">
+            <option value="local">En el local</option>
+            <option value="domicilio">A domicilio</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="incomeClient">Cliente <span>Opcional</span></label>
+          <input type="text" id="incomeClient" placeholder="Nombre del cliente">
+        </div>
+
+        <div class="form-group full">
+          <label>Foto de la reparación <span>Opcional</span></label>
+          <div class="photo-upload" id="incomePhotoUpload">
+            <input type="file" id="incomePhoto" accept="image/*" hidden>
+            <div class="photo-placeholder" id="photoPlaceholder">
+              <div class="photo-icon">📷</div>
+              <strong>Agregar foto</strong>
+              <span>Tocá para seleccionar una imagen</span>
+            </div>
+            <img id="incomePhotoPreview" class="photo-preview" alt="Vista previa">
+          </div>
+          <button type="button" class="remove-photo" id="removeIncomePhoto">Quitar foto</button>
+        </div>
+
+        <div class="form-group full">
+          <label for="incomeNotes">Nota <span>Opcional</span></label>
+          <textarea id="incomeNotes" rows="3" placeholder="Cualquier detalle de la reparación..."></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="secondary-button" data-close="incomeModal">Cancelar</button>
+        <button type="submit" class="primary-button">Guardar ingreso</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     MODAL: EGRESO
+============================================================ -->
+<div class="modal-overlay" id="expenseModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <span class="modal-label expense-label">NUEVO EGRESO</span>
+        <h2 id="expenseModalTitle">Registrar gasto</h2>
+        <p>Guardá todo el dinero que salió del negocio.</p>
+      </div>
+      <button class="modal-close" data-close="expenseModal">×</button>
+    </div>
+
+    <form id="expenseForm">
+      <input type="hidden" id="expenseId">
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="expenseDate">Fecha</label>
+          <input type="date" id="expenseDate" required>
+        </div>
+
+        <div class="form-group">
+          <label for="expenseAmount">Monto</label>
+          <div class="money-input">
+            <span>G.</span>
+            <input type="text" inputmode="numeric" id="expenseAmount" placeholder="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="expenseCategory">Categoría</label>
+          <select id="expenseCategory">
+            <option value="repuesto">Repuesto</option>
+            <option value="herramienta">Herramienta</option>
+            <option value="insumo">Insumo</option>
+            <option value="transporte">Transporte</option>
+            <option value="servicio">Servicio</option>
+            <option value="alquiler">Alquiler</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="expenseConcept">Concepto</label>
+          <input type="text" id="expenseConcept" placeholder="Ej.: Display Samsung A13" required>
+        </div>
+
+        <div class="form-group">
+          <label for="expenseBrand">Marca <span>Opcional</span></label>
+          <input type="text" id="expenseBrand" placeholder="Ej.: Samsung">
+        </div>
+
+        <div class="form-group">
+          <label for="expenseModel">Modelo <span>Opcional</span></label>
+          <input type="text" id="expenseModel" placeholder="Ej.: A13">
+        </div>
+
+        <div class="form-group full">
+          <label for="expenseQuality">Calidad <span>Opcional</span></label>
+          <input type="text" id="expenseQuality" placeholder="Ej.: OLED, Original, Premium...">
+        </div>
+
+        <div class="form-group full">
+          <label for="expenseSupplier">Proveedor <span>Opcional</span></label>
+          <input type="text" id="expenseSupplier" placeholder="Nombre del proveedor">
+        </div>
+
+        <div class="form-group full">
+          <label for="expenseNotes">Nota <span>Opcional</span></label>
+          <textarea id="expenseNotes" rows="3" placeholder="Detalles del gasto..."></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="secondary-button" data-close="expenseModal">Cancelar</button>
+        <button type="submit" class="danger-button">Guardar egreso</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     MODAL: DETALLE
+============================================================ -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal detail-modal">
+    <div class="modal-header">
+      <div>
+        <span class="modal-label" id="detailType">INGRESO</span>
+        <h2 id="detailTitle">Detalle</h2>
+        <p id="detailDate">—</p>
+      </div>
+      <button class="modal-close" data-close="detailModal">×</button>
+    </div>
+    <div id="detailContent"></div>
+    <div class="modal-footer">
+      <button type="button" class="secondary-button" id="editDetail">Editar</button>
+      <button type="button" class="danger-button" id="deleteDetail">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     TOAST
+============================================================ -->
+<div class="toast" id="toast">
+  <span class="toast-icon">✓</span>
+  <div>
+    <strong id="toastTitle">Guardado</strong>
+    <span id="toastMessage">El movimiento fue guardado correctamente.</span>
+  </div>
+</div>
+
+<script>
+    /* ============================================================
+   TECNO FS — CONTROL FINANCIERO
+   ------------------------------------------------------------
+   NOTA DE SEGURIDAD:
+   Esta es una aplicación 100% local (HTML/CSS/JS sin servidor).
+   La contraseña se hashea con PBKDF2 + salt vía Web Crypto API,
+   pero NINGUNA protección local es equivalente a un servidor
+   real. Alguien con acceso físico al dispositivo y conocimientos
+   técnicos podría leer/modificar el localStorage. Igual sirve
+   como barrera para evitar miradas accidentales.
+============================================================ */
+
+'use strict';
+
+/* ============================================================
+   CONFIGURACIÓN
+============================================================ */
+const STORAGE_KEY = 'tecnofs_finanzas_v1';   // ¡NO cambiar! Tus datos viven acá.
+const AUTH_KEY    = 'tecnofs_auth_v1';
+const SESSION_KEY = 'tecnofs_session_active';
+
+/* ============================================================
+   ESTADO
+============================================================ */
+let data = { movements: [] };
+
+let currentPage = 'inicio';
+let currentPeriod = 'month';
+let currentReport = 'month';
+let customRange = { from: null, to: null };
+
+let calendarDate = new Date();
+let selectedCalendarDate = null;
+
+let currentDetailId = null;
+let currentIncomePhoto = null;
+
+/* ============================================================
+   HELPERS
+============================================================ */
+const $  = (s) => document.querySelector(s);
+const $$ = (s) => document.querySelectorAll(s);
+
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+}
+
+function escapeHTML(v) {
+  if (v === null || v === undefined) return '';
+  return String(v)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+/* ---------- FECHAS ---------- */
+function getTodayISO() {
+  const n = new Date();
+  return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`;
+}
+
+function parseISODate(s) {
+  if (!s) return new Date();
+  const [y, m, d] = s.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
+function formatISODate(date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function formatShortDate(iso) {
+  const d = parseISODate(iso);
+  return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+}
+
+function formatLongDate(iso) {
+  const d = parseISODate(iso);
+  return new Intl.DateTimeFormat('es-PY', {
+    day: 'numeric', month: 'long', year: 'numeric'
+  }).format(d);
+}
+
+/* ---------- MONEDA ---------- */
+function formatMoney(value) {
+  const n = Math.round(Number(value) || 0);
+  return new Intl.NumberFormat('es-PY').format(n);
+}
+
+function money(value) {
+  return `G. ${formatMoney(value)}`;
+}
+
+function parseMoney(str) {
+  return Number(String(str).replace(/\D/g, '')) || 0;
+}
+
+/* ============================================================
+   AUTENTICACIÓN (Web Crypto API - PBKDF2)
+============================================================ */
+function bytesToHex(bytes) {
+  return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function hexToBytes(hex) {
+  const arr = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < hex.length; i += 2) {
+    arr[i / 2] = parseInt(hex.substr(i, 2), 16);
+  }
+  return arr;
+}
+
+async function hashPassword(password, saltHex) {
+  const enc = new TextEncoder();
+  const salt = saltHex ? hexToBytes(saltHex) : crypto.getRandomValues(new Uint8Array(16));
+
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw',
+    enc.encode(password),
+    { name: 'PBKDF2' },
+    false,
+    ['deriveBits']
+  );
+
+  const bits = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
+    keyMaterial,
+    256
+  );
+
+  return { hash: bytesToHex(new Uint8Array(bits)), salt: bytesToHex(salt) };
+}
+
+function getAuth() {
+  try {
+    return JSON.parse(localStorage.getItem(AUTH_KEY) || 'null');
+  } catch { return null; }
+}
+
+function saveAuth(obj) {
+  localStorage.setItem(AUTH_KEY, JSON.stringify(obj));
+}
+
+async function verifyPassword(password) {
+  const auth = getAuth();
+  if (!auth) return false;
+  const { hash } = await hashPassword(password, auth.salt);
+  return hash === auth.hash;
+}
+
+function isSessionActive() {
+  return sessionStorage.getItem(SESSION_KEY) === '1';
+}
+
+function setSession(active) {
+  if (active) sessionStorage.setItem(SESSION_KEY, '1');
+  else sessionStorage.removeItem(SESSION_KEY);
+}
+
+/* ---------- PANTALLA DE ACCESO ---------- */
+function showAuthScreen() {
+  $('#authScreen').classList.remove('hidden');
+  $('#app').classList.add('hidden');
+
+  const auth = getAuth();
+  const isSetup = !auth;
+
+  $('#authLabel').textContent = isSetup ? 'Creá tu contraseña de acceso' : 'Ingresá tu contraseña';
+  $('#authPasswordConfirm').classList.toggle('hidden', !isSetup);
+  $('#authPassword').setAttribute('autocomplete', isSetup ? 'new-password' : 'current-password');
+  $('#authSubmit').textContent = isSetup ? 'CREAR CONTRASEÑA' : 'INGRESAR';
+  $('#authError').textContent = '';
+  $('#authPassword').value = '';
+  $('#authPasswordConfirm').value = '';
+
+  setTimeout(() => $('#authPassword').focus(), 200);
+}
+
+function showApp() {
+  $('#authScreen').classList.add('hidden');
+  $('#app').classList.remove('hidden');
+  renderEverything();
+}
+
+async function handleAuthSubmit(e) {
+  e.preventDefault();
+  const auth = getAuth();
+  const error = $('#authError');
+  error.textContent = '';
+
+  if (!auth) {
+    // Setup inicial
+    const pwd = $('#authPassword').value;
+    const confirm = $('#authPasswordConfirm').value;
+
+    if (pwd.length < 4) { error.textContent = 'La contraseña debe tener al menos 4 caracteres.'; return; }
+    if (pwd !== confirm) { error.textContent = 'Las contraseñas no coinciden.'; return; }
+
+    const { hash, salt } = await hashPassword(pwd);
+    saveAuth({ hash, salt, createdAt: Date.now() });
+    setSession(true);
+    showApp();
+    showToast('Contraseña creada', 'Tu acceso personal ya está configurado.');
+    return;
+  }
+
+  const pwd = $('#authPassword').value;
+  const ok = await verifyPassword(pwd);
+
+  if (!ok) {
+    error.textContent = 'Contraseña incorrecta.';
+    $('#authPassword').value = '';
+    return;
+  }
+
+  setSession(true);
+  showApp();
+}
+
+function logout() {
+  setSession(false);
+  showAuthScreen();
+}
+
+/* ============================================================
+   DATOS (localStorage) — conserva estructura existente
+============================================================ */
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) { data = { movements: [] }; return; }
+    const parsed = JSON.parse(raw);
+    if (parsed && Array.isArray(parsed.movements)) {
+      data = parsed;
+    } else {
+      data = { movements: [] };
+    }
+  } catch (e) {
+    console.error('Error cargando datos:', e);
+    data = { movements: [] };
+  }
+}
+
+function saveData() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.error('Error guardando:', e);
+    showToast('No se pudo guardar', 'Almacenamiento lleno.', 'error');
+  }
+}
+
+/* ============================================================
+   CÁLCULOS
+============================================================ */
+function calculateTotals(list) {
+  let income = 0, expense = 0;
+  for (const m of list) {
+    if (m.type === 'income') income += Number(m.amount) || 0;
+    else if (m.type === 'expense') expense += Number(m.amount) || 0;
+  }
+  return { income, expense, balance: income - expense };
+}
+
+function getPeriodRange(period) {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  if (period === 'day') return { start: today, end: today };
+
+  if (period === 'week') {
+    const day = today.getDay();
+    const diff = day === 0 ? -6 : 1 - day;
+    const start = new Date(today); start.setDate(today.getDate() + diff);
+    const end = new Date(start); end.setDate(start.getDate() + 6);
+    return { start, end };
+  }
+
+  if (period === 'month') {
+    return {
+      start: new Date(today.getFullYear(), today.getMonth(), 1),
+      end: new Date(today.getFullYear(), today.getMonth() + 1, 0)
+    };
+  }
+
+  if (period === 'year') {
+    return {
+      start: new Date(today.getFullYear(), 0, 1),
+      end: new Date(today.getFullYear(), 11, 31)
+    };
+  }
+
+  return { start: null, end: null };
+}
+
+function dateInRange(iso, range) {
+  if (!range.start || !range.end) return true;
+  const d = parseISODate(iso);
+  return d >= range.start && d <= range.end;
+}
+
+function getMovementsForPeriod(period) {
+  const range = getPeriodRange(period);
+  return data.movements.filter(m => dateInRange(m.date, range));
+}
+
+function getSortTime(m) {
+  const d = parseISODate(m.date);
+  return d.getTime() + ((Number(m.createdAt) || 0) % 86400000);
+}
+
+/* ============================================================
+   FORMATO AUTOMÁTICO DE MONTO EN INPUTS
+============================================================ */
+function setupMoneyInput(input) {
+  if (!input) return;
+
+  input.addEventListener('input', () => {
+    const raw = input.value.replace(/\D/g, '');
+    if (!raw) { input.value = ''; return; }
+    input.value = formatMoney(raw);
+  });
+
+  input.addEventListener('blur', () => {
+    const raw = input.value.replace(/\D/g, '');
+    if (!raw) { input.value = ''; return; }
+    input.value = formatMoney(raw);
+  });
+}
+
+/* ============================================================
+   NAVEGACIÓN
+============================================================ */
+function setupNavigation() {
+  $$('.nav-item[data-page]').forEach(btn => {
+    btn.addEventListener('click', () => showPage(btn.dataset.page));
+  });
+
+  $$('.text-button[data-page]').forEach(btn => {
+    btn.addEventListener('click', () => showPage(btn.dataset.page));
+  });
+
+  $('#mobileMenu')?.addEventListener('click', toggleSidebar);
+  $('#sidebarOverlay')?.addEventListener('click', closeSidebar);
+}
+
+function showPage(page) {
+  currentPage = page;
+  $$('.page').forEach(s => s.classList.remove('active'));
+  $(`#page-${page}`)?.classList.add('active');
+
+  $$('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+  updatePageHeader(page);
+  closeSidebar();
+
+  if (page === 'inicio') renderDashboard();
+  if (page === 'movimientos') renderMovements();
+  if (page === 'calendario') renderCalendar();
+  if (page === 'reportes') renderReports();
+}
+
+function updatePageHeader(page) {
+  const titles = {
+    inicio: ['Balance', 'Controlá todo lo que entra y sale de TECNO FS.'],
+    movimientos: ['Movimientos', 'Todos tus ingresos y egresos.'],
+    calendario: ['Calendario', 'Consultá tus ingresos y gastos por día.'],
+    reportes: ['Reportes', 'Analizá cómo estuvo tu negocio.'],
+    configuracion: ['Configuración', 'Seguridad, respaldo y datos.']
+  };
+  const [t, d] = titles[page] || titles.inicio;
+  $('#pageTitle').textContent = t;
+  $('#pageDescription').textContent = d;
+}
+
+function toggleSidebar() {
+  $('#sidebar').classList.toggle('open');
+  $('#sidebarOverlay').classList.toggle('open');
+}
+
+function closeSidebar() {
+  $('#sidebar').classList.remove('open');
+  $('#sidebarOverlay').classList.remove('open');
+}
+
+/* ============================================================
+   MODALES
+============================================================ */
+function openModal(id) { $('#' + id)?.classList.add('open'); }
+function closeModal(id) { $('#' + id)?.classList.remove('open'); }
+
+function setupModalClosing() {
+  $$('.modal-close').forEach(btn => {
+    btn.addEventListener('click', () => closeModal(btn.dataset.close));
+  });
+
+  $$('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) overlay.classList.remove('open');
+    });
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      $$('.modal-overlay').forEach(m => m.classList.remove('open'));
+      closeSidebar();
+    }
+  });
+}
+
+/* ============================================================
+   DASHBOARD (INICIO)
+============================================================ */
+function renderDashboard() {
+  const list = getMovementsForPeriod(currentPeriod);
+  const t = calculateTotals(list);
+
+  $('#balanceTotal').textContent = money(t.balance);
+  $('#totalIncome').textContent = money(t.income);
+  $('#totalExpense').textContent = money(t.expense);
+
+  const labels = { day: 'Hoy', week: 'Esta semana', month: 'Este mes', year: 'Este año', all: 'Todo' };
+  $('#currentPeriodLabel').textContent = labels[currentPeriod] || 'Este mes';
+
+  renderRecentList();
+}
+
+function renderRecentList() {
+  const container = $('#recentList');
+  if (!container) return;
+
+  const recent = [...data.movements]
+    .sort((a, b) => getSortTime(b) - getSortTime(a))
+    .slice(0, 6);
+
+  if (!recent.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">₲</div>
+        <h3>Todavía no hay movimientos</h3>
+        <p>Registrá tu primera reparación o gasto.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = recent.map(movementHTML).join('');
+  attachMovementClicks(container);
+}
+
+/* ============================================================
+   MOVIMIENTOS
+============================================================ */
+function setupFilters() {
+  $('#movementSearch')?.addEventListener('input', renderMovements);
+  $('#movementType')?.addEventListener('change', renderMovements);
+  $('#movementPeriod')?.addEventListener('change', renderMovements);
+}
+
+function renderMovements() {
+  const container = $('#movementList');
+  if (!container) return;
+
+  const search = ($('#movementSearch')?.value || '').trim().toLowerCase();
+  const type = $('#movementType')?.value || 'all';
+  const period = $('#movementPeriod')?.value || 'month';
+
+  let list = [...data.movements];
+
+  if (type !== 'all') list = list.filter(m => m.type === type);
+  if (period !== 'all') {
+    const range = getPeriodRange(period);
+    list = list.filter(m => dateInRange(m.date, range));
+  }
+
+  if (search) {
+    list = list.filter(m => {
+      const text = [
+        m.service, m.brand, m.model, m.client,
+        m.concept, m.category, m.quality, m.supplier, m.notes
+      ].filter(Boolean).join(' ').toLowerCase();
+      return text.includes(search);
+    });
+  }
+
+  list.sort((a, b) => getSortTime(b) - getSortTime(a));
+
+  if (!list.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">⌕</div>
+        <h3>No encontramos movimientos</h3>
+        <p>Probá cambiar el filtro o registrar uno nuevo.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(movementHTML).join('');
+  attachMovementClicks(container);
+}
+
+function getExpenseCategoryName(cat) {
+  const map = {
+    repuesto: 'Repuesto', herramienta: 'Herramienta',
+    insumo: 'Insumo', transporte: 'Transporte',
+    servicio: 'Servicio', alquiler: 'Alquiler', otro: 'Otro'
+  };
+  return map[cat] || 'Gasto';
+}
+
+function movementHTML(m) {
+  const isIncome = m.type === 'income';
+  const title = isIncome ? (m.service || 'Reparación') : (m.concept || 'Gasto');
+  let subtitle = '';
+
+  if (isIncome) {
+    subtitle = [m.brand, m.model, m.location === 'domicilio' ? 'A domicilio' : 'En el local']
+      .filter(Boolean).join(' • ');
+  } else {
+    subtitle = [getExpenseCategoryName(m.category), m.brand, m.model, m.quality]
+      .filter(Boolean).join(' • ');
+  }
+
+  return `
+    <div class="movement-item ${isIncome ? 'income' : 'expense'}" data-id="${escapeHTML(m.id)}">
+      <div class="movement-icon">${isIncome ? '↗' : '↙'}</div>
+      <div class="movement-info">
+        <strong>${escapeHTML(title)}</strong>
+        <span>${escapeHTML(subtitle || (isIncome ? 'Ingreso' : 'Egreso'))}</span>
+      </div>
+      <div class="movement-amount">${isIncome ? '+' : '−'}${money(m.amount)}</div>
+      <div class="movement-date">${formatShortDate(m.date)}</div>
+    </div>`;
+}
+
+function attachMovementClicks(container) {
+  container.querySelectorAll('.movement-item').forEach(el => {
+    el.addEventListener('click', () => openDetailModal(el.dataset.id));
+  });
+}
+
+/* ============================================================
+   FORMULARIOS: INGRESO / EGRESO
+============================================================ */
+function setupForms() {
+  $('#incomeForm')?.addEventListener('submit', saveIncome);
+  $('#expenseForm')?.addEventListener('submit', saveExpense);
+
+  setupMoneyInput($('#incomeAmount'));
+  setupMoneyInput($('#expenseAmount'));
+
+  $('#incomeDate').value = getTodayISO();
+  $('#expenseDate').value = getTodayISO();
+}
+
+function openIncomeModal(id = null) {
+  const form = $('#incomeForm');
+  form.reset();
+  $('#incomeId').value = '';
+  currentIncomePhoto = null;
+  resetPhotoPreview();
+  $('#incomeDate').value = getTodayISO();
+  $('#incomeModalTitle').textContent = id ? 'Editar ingreso' : 'Registrar reparación';
+
+  if (id) {
+    const m = findMovement(id);
+    if (!m || m.type !== 'income') return;
+    $('#incomeId').value = m.id;
+    $('#incomeDate').value = m.date;
+    $('#incomeAmount').value = formatMoney(m.amount);
+    $('#incomeService').value = m.service || '';
+    $('#incomeBrand').value = m.brand || '';
+    $('#incomeModel').value = m.model || '';
+    $('#incomeLocation').value = m.location || 'local';
+    $('#incomeClient').value = m.client || '';
+    $('#incomeNotes').value = m.notes || '';
+    currentIncomePhoto = m.photo || null;
+    if (currentIncomePhoto) showPhotoPreview(currentIncomePhoto);
+  }
+
+  openModal('incomeModal');
+  setTimeout(() => $('#incomeService')?.focus(), 150);
+}
+
+function saveIncome(e) {
+  e.preventDefault();
+  const id = $('#incomeId').value;
+
+  const movement = {
+    id: id || generateId(),
+    type: 'income',
+    date: $('#incomeDate').value,
+    amount: parseMoney($('#incomeAmount').value),
+    service: $('#incomeService').value.trim(),
+    brand: $('#incomeBrand').value.trim(),
+    model: $('#incomeModel').value.trim(),
+    location: $('#incomeLocation').value,
+    client: $('#incomeClient').value.trim(),
+    photo: currentIncomePhoto || null,
+    notes: $('#incomeNotes').value.trim(),
+    createdAt: id ? getExistingCreatedAt(id) : Date.now(),
+    updatedAt: Date.now()
+  };
+
+  if (!movement.date || !movement.service || movement.amount <= 0) {
+    showToast('Revisá los datos', 'Completá la fecha, reparación y monto.', 'error');
+    return;
+  }
+
+  if (id) {
+    const i = data.movements.findIndex(m => m.id === id);
+    if (i !== -1) data.movements[i] = movement;
+    showToast('Ingreso actualizado', 'La reparación fue modificada.');
+  } else {
+    data.movements.push(movement);
+    showToast('Ingreso guardado', 'La reparación quedó registrada.');
+  }
+
+  saveData();
+  closeModal('incomeModal');
+  renderEverything();
+}
+
+function openExpenseModal(id = null) {
+  const form = $('#expenseForm');
+  form.reset();
+  $('#expenseId').value = '';
+  $('#expenseDate').value = getTodayISO();
+  $('#expenseModalTitle').textContent = id ? 'Editar egreso' : 'Registrar gasto';
+
+  if (id) {
+    const m = findMovement(id);
+    if (!m || m.type !== 'expense') return;
+    $('#expenseId').value = m.id;
+    $('#expenseDate').value = m.date;
+    $('#expenseAmount').value = formatMoney(m.amount);
+    $('#expenseCategory').value = m.category || 'otro';
+    $('#expenseConcept').value = m.concept || '';
+    $('#expenseBrand').value = m.brand || '';
+    $('#expenseModel').value = m.model || '';
+    $('#expenseQuality').value = m.quality || '';
+    $('#expenseSupplier').value = m.supplier || '';
+    $('#expenseNotes').value = m.notes || '';
+  }
+
+  openModal('expenseModal');
+  setTimeout(() => $('#expenseConcept')?.focus(), 150);
+}
+
+function saveExpense(e) {
+  e.preventDefault();
+  const id = $('#expenseId').value;
+
+  const movement = {
+    id: id || generateId(),
+    type: 'expense',
+    date: $('#expenseDate').value,
+    amount: parseMoney($('#expenseAmount').value),
+    category: $('#expenseCategory').value,
+    concept: $('#expenseConcept').value.trim(),
+    brand: $('#expenseBrand').value.trim(),
+    model: $('#expenseModel').value.trim(),
+    quality: $('#expenseQuality').value.trim(),
+    supplier: $('#expenseSupplier').value.trim(),
+    notes: $('#expenseNotes').value.trim(),
+    createdAt: id ? getExistingCreatedAt(id) : Date.now(),
+    updatedAt: Date.now()
+  };
+
+  if (!movement.date || !movement.concept || movement.amount <= 0) {
+    showToast('Revisá los datos', 'Completá la fecha, concepto y monto.', 'error');
+    return;
+  }
+
+  if (id) {
+    const i = data.movements.findIndex(m => m.id === id);
+    if (i !== -1) data.movements[i] = movement;
+    showToast('Egreso actualizado', 'El gasto fue modificado.');
+  } else {
+    data.movements.push(movement);
+    showToast('Egreso guardado', 'El gasto quedó registrado.');
+  }
+
+  saveData();
+  closeModal('expenseModal');
+  renderEverything();
+}
+
+function findMovement(id) { return data.movements.find(m => m.id === id); }
+function getExistingCreatedAt(id) { return findMovement(id)?.createdAt || Date.now(); }
+
+/* ============================================================
+   FOTO
+============================================================ */
+function setupPhotoUpload() {
+  const upload = $('#incomePhotoUpload');
+  const input = $('#incomePhoto');
+
+  upload?.addEventListener('click', () => input.click());
+
+  input?.addEventListener('change', async e => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      currentIncomePhoto = await compressImage(file);
+      showPhotoPreview(currentIncomePhoto);
+    } catch (err) {
+      console.error(err);
+      showToast('Error con la foto', 'No se pudo cargar la imagen.', 'error');
+    }
+  });
+
+  $('#removeIncomePhoto')?.addEventListener('click', e => {
+    e.stopPropagation();
+    currentIncomePhoto = null;
+    resetPhotoPreview();
+  });
+}
+
+function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const img = new Image();
+      img.onload = () => {
+        const maxW = 1000, maxH = 1000;
+        let w = img.width, h = img.height;
+        const scale = Math.min(maxW / w, maxH / h, 1);
+        w = Math.round(w * scale);
+        h = Math.round(h * scale);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.78));
+      };
+      img.onerror = reject;
+      img.src = ev.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function showPhotoPreview(src) {
+  $('#incomePhotoPreview').src = src;
+  $('#incomePhotoPreview').classList.add('visible');
+  $('#photoPlaceholder').classList.add('hidden');
+  $('#removeIncomePhoto').classList.add('visible');
+}
+
+function resetPhotoPreview() {
+  $('#incomePhotoPreview').src = '';
+  $('#incomePhotoPreview').classList.remove('visible');
+  $('#photoPlaceholder').classList.remove('hidden');
+  $('#removeIncomePhoto').classList.remove('visible');
+  if ($('#incomePhoto')) $('#incomePhoto').value = '';
+}
+
+/* ============================================================
+   DETALLE
+============================================================ */
+function openDetailModal(id) {
+  const m = findMovement(id);
+  if (!m) return;
+
+  currentDetailId = id;
+  const isIncome = m.type === 'income';
+
+  $('#detailType').textContent = isIncome ? 'INGRESO' : 'EGRESO';
+  $('#detailType').className = `modal-label ${isIncome ? 'income-label' : 'expense-label'}`;
+  $('#detailTitle').textContent = isIncome ? (m.service || 'Reparación') : (m.concept || 'Gasto');
+  $('#detailDate').textContent = formatLongDate(m.date);
+  $('#detailContent').innerHTML = isIncome ? buildIncomeDetail(m) : buildExpenseDetail(m);
+
+  openModal('detailModal');
+}
+
+function detailField(label, value) {
+  if (!value) value = '—';
+  return `<div class="detail-field"><span>${escapeHTML(label)}</span><strong>${escapeHTML(value)}</strong></div>`;
+}
+
+function buildIncomeDetail(m) {
+  const title = [m.brand, m.model].filter(Boolean).join(' ') || 'Reparación TECNO FS';
+  const photo = m.photo
+    ? `<img src="${m.photo}" class="detail-photo" alt="Foto">`
+    : `<div class="detail-photo empty">📷</div>`;
+
+  return `
+    <div class="detail-body">
+      <div class="detail-main">
+        ${photo}
+        <div class="detail-info">
+          <h3>${escapeHTML(title)}</h3>
+          <p>${escapeHTML(m.service || '')}</p>
+          <div class="detail-amount income">+${money(m.amount)}</div>
+        </div>
+      </div>
+      <div class="detail-fields">
+        ${detailField('Modalidad', m.location === 'domicilio' ? 'A domicilio' : 'En el local')}
+        ${detailField('Marca', m.brand)}
+        ${detailField('Modelo', m.model)}
+        ${detailField('Cliente', m.client)}
+        ${detailField('Fecha', formatShortDate(m.date))}
+      </div>
+      ${m.notes ? `<div class="detail-notes"><span>Nota</span><p>${escapeHTML(m.notes)}</p></div>` : ''}
+    </div>`;
+}
+
+function buildExpenseDetail(m) {
+  return `
+    <div class="detail-body">
+      <div class="detail-main">
+        <div class="detail-info">
+          <h3>${escapeHTML(m.concept || 'Gasto')}</h3>
+          <p>${escapeHTML(getExpenseCategoryName(m.category))}</p>
+          <div class="detail-amount expense">−${money(m.amount)}</div>
+        </div>
+      </div>
+      <div class="detail-fields">
+        ${detailField('Categoría', getExpenseCategoryName(m.category))}
+        ${detailField('Marca', m.brand)}
+        ${detailField('Modelo', m.model)}
+        ${detailField('Calidad', m.quality)}
+        ${detailField('Proveedor', m.supplier)}
+        ${detailField('Fecha', formatShortDate(m.date))}
+      </div>
+      ${m.notes ? `<div class="detail-notes"><span>Nota</span><p>${escapeHTML(m.notes)}</p></div>` : ''}
+    </div>`;
+}
+
+function editCurrentDetail() {
+  if (!currentDetailId) return;
+  const m = findMovement(currentDetailId);
+  if (!m) return;
+  closeModal('detailModal');
+  if (m.type === 'income') openIncomeModal(m.id);
+  else openExpenseModal(m.id);
+}
+
+function deleteCurrentDetail() {
+  if (!currentDetailId) return;
+  const m = findMovement(currentDetailId);
+  if (!m) return;
+
+  const name = m.type === 'income' ? (m.service || 'esta reparación') : (m.concept || 'este gasto');
+  if (!confirm(`¿Querés eliminar "${name}"?\n\nEsta acción no se puede deshacer.`)) return;
+
+  data.movements = data.movements.filter(x => x.id !== currentDetailId);
+  saveData();
+  closeModal('detailModal');
+  currentDetailId = null;
+  renderEverything();
+  showToast('Movimiento eliminado', 'El registro fue eliminado correctamente.');
+}
+
+/* ============================================================
+   CALENDARIO
+============================================================ */
+function setupCalendar() {
+  $('#prevMonth')?.addEventListener('click', () => {
+    calendarDate.setMonth(calendarDate.getMonth() - 1);
+    renderCalendar();
+  });
+  $('#nextMonth')?.addEventListener('click', () => {
+    calendarDate.setMonth(calendarDate.getMonth() + 1);
+    renderCalendar();
+  });
+}
+
+function renderCalendar() {
+  const grid = $('#calendarGrid');
+  if (!grid) return;
+
+  const y = calendarDate.getFullYear();
+  const mo = calendarDate.getMonth();
+
+  $('#calendarMonth').textContent = new Intl.DateTimeFormat('es-PY', {
+    month: 'long', year: 'numeric'
+  }).format(calendarDate);
+
+  const firstDay = new Date(y, mo, 1);
+  let startDow = firstDay.getDay();
+  startDow = startDow === 0 ? 6 : startDow - 1;
+
+  const daysInMonth = new Date(y, mo + 1, 0).getDate();
+  const daysPrev = new Date(y, mo, 0).getDate();
+
+  let html = '';
+
+  for (let i = startDow - 1; i >= 0; i--) {
+    html += calendarDayHTML(new Date(y, mo - 1, daysPrev - i), true);
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    html += calendarDayHTML(new Date(y, mo, d), false);
+  }
+
+  const totalCells = Math.ceil((startDow + daysInMonth) / 7) * 7;
+  const remaining = totalCells - (startDow + daysInMonth);
+  for (let d = 1; d <= remaining; d++) {
+    html += calendarDayHTML(new Date(y, mo + 1, d), true);
+  }
+
+  grid.innerHTML = html;
+
+  grid.querySelectorAll('.calendar-day').forEach(el => {
+    el.addEventListener('click', () => selectCalendarDay(el.dataset.date));
+  });
+
+  if (selectedCalendarDate) {
+    grid.querySelector(`[data-date="${selectedCalendarDate}"]`)?.classList.add('selected');
+  }
+}
+
+function calendarDayHTML(date, otherMonth) {
+  const iso = formatISODate(date);
+  const list = data.movements.filter(m => m.date === iso);
+  const t = calculateTotals(list);
+  const isToday = iso === getTodayISO();
+  const isSelected = iso === selectedCalendarDate;
+
+  return `
+    <div class="calendar-day ${otherMonth ? 'other-month' : ''} ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''}" data-date="${iso}">
+      <span class="calendar-number">${date.getDate()}</span>
+      <div class="calendar-day-totals">
+        ${t.income > 0 ? `<span class="calendar-income">+${formatMoney(t.income)}</span>` : ''}
+        ${t.expense > 0 ? `<span class="calendar-expense">−${formatMoney(t.expense)}</span>` : ''}
+      </div>
+    </div>`;
+}
+
+function selectCalendarDay(iso) {
+  selectedCalendarDate = iso;
+  renderCalendar();
+  renderSelectedDay(iso);
+}
+
+function renderSelectedDay(iso) {
+  const panel = $('#selectedDayPanel');
+  if (!panel) return;
+
+  const list = data.movements.filter(m => m.date === iso).sort((a, b) => getSortTime(b) - getSortTime(a));
+  const t = calculateTotals(list);
+  const formatted = formatLongDate(iso);
+
+  if (!list.length) {
+    panel.innerHTML = `
+      <div class="empty-selection">
+        <div class="empty-icon">📅</div>
+        <h3>${escapeHTML(formatted)}</h3>
+        <p>No hay movimientos registrados en este día.</p>
+      </div>`;
+    return;
+  }
+
+  panel.innerHTML = `
+    <div class="day-panel-header">
+      <div>
+        <h3>${escapeHTML(formatted)}</h3>
+        <div class="day-panel-summary">
+          <span>Ingresos: <strong class="income-text">${money(t.income)}</strong></span>
+          <span>Egresos: <strong class="expense-text">${money(t.expense)}</strong></span>
+        </div>
+      </div>
+      <strong>${money(t.balance)}</strong>
+    </div>
+    <div class="day-movements">
+      ${list.map(movementHTML).join('')}
+    </div>`;
+
+  attachMovementClicks(panel);
+}
+
+/* ============================================================
+   REPORTES
+============================================================ */
+function setupReports() {
+  $$('.report-period-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentReport = btn.dataset.report;
+      $$('.report-period-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      $('#customRange').classList.toggle('hidden', currentReport !== 'custom');
+      renderReports();
+    });
+  });
+
+  $('#applyRange')?.addEventListener('click', () => {
+    customRange.from = $('#rangeFrom').value;
+    customRange.to = $('#rangeTo').value;
+    renderReports();
+  });
+}
+
+function getMovementsForReport() {
+  if (currentReport === 'all') return [...data.movements];
+
+  if (currentReport === 'custom') {
+    if (!customRange.from || !customRange.to) return [];
+    const from = parseISODate(customRange.from);
+    const to = parseISODate(customRange.to);
+    return data.movements.filter(m => {
+      const d = parseISODate(m.date);
+      return d >= from && d <= to;
+    });
+  }
+
+  return getMovementsForPeriod(currentReport);
+}
+
+function renderReports() {
+  const list = getMovementsForReport();
+  const t = calculateTotals(list);
+
+  $('#reportIncome').textContent = money(t.income);
+  $('#reportExpense').textContent = money(t.expense);
+  $('#reportBalance').textContent = money(t.balance);
+
+  $('#reportBalance').classList.toggle('income-text', t.balance > 0);
+  $('#reportBalance').classList.toggle('expense-text', t.balance < 0);
+
+  const incCount = list.filter(m => m.type === 'income').length;
+  const expCount = list.filter(m => m.type === 'expense').length;
+
+  $('#reportIncomeCount').textContent = `${incCount} movimiento${incCount === 1 ? '' : 's'}`;
+  $('#reportExpenseCount').textContent = `${expCount} movimiento${expCount === 1 ? '' : 's'}`;
+
+  renderReportBreakdown(list);
+  renderChart();
+}
+
+function renderReportBreakdown(list) {
+  const container = $('#reportBreakdown');
+  if (!container) return;
+
+  if (!list.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">◔</div>
+        <h3>Sin datos todavía</h3>
+        <p>Cuando registres movimientos aparecerá el resumen.</p>
+      </div>`;
+    return;
+  }
+
+  const t = calculateTotals(list);
+  const incCount = list.filter(m => m.type === 'income').length;
+  const expCount = list.filter(m => m.type === 'expense').length;
+  const avgIncome = incCount ? Math.round(t.income / incCount) : 0;
+  const avgExpense = expCount ? Math.round(t.expense / expCount) : 0;
+
+  // Reparaciones por servicio
+  const byService = {};
+  list.filter(m => m.type === 'income').forEach(m => {
+    const key = m.service || 'Sin especificar';
+    byService[key] = (byService[key] || 0) + Number(m.amount);
+  });
+  const topServices = Object.entries(byService).sort((a, b) => b[1] - a[1]).slice(0, 6);
+
+  let extra = '';
+  if (topServices.length) {
+    topServices.forEach(([service, amount]) => {
+      extra += `
+        <div class="breakdown-row">
+          <span>${escapeHTML(service)}</span>
+          <strong class="income-text">${money(amount)}</strong>
+        </div>`;
+    });
+  }
+
+  container.innerHTML = `
+    <div class="breakdown-row"><span>Total ingresos</span><strong class="income-text">${money(t.income)}</strong></div>
+    <div class="breakdown-row"><span>Total egresos</span><strong class="expense-text">${money(t.expense)}</strong></div>
+    <div class="breakdown-row"><span>Resultado neto</span><strong>${money(t.balance)}</strong></div>
+    <div class="breakdown-row"><span>Reparaciones registradas</span><strong>${incCount}</strong></div>
+    <div class="breakdown-row"><span>Gastos registrados</span><strong>${expCount}</strong></div>
+    <div class="breakdown-row"><span>Ticket promedio por reparación</span><strong>${money(avgIncome)}</strong></div>
+    <div class="breakdown-row"><span>Gasto promedio</span><strong>${money(avgExpense)}</strong></div>
+    ${extra}`;
+}
+
+function renderChart() {
+  const chart = $('#chart');
+  if (!chart) return;
+
+  const months = [];
+  const now = new Date();
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    months.push({
+      key: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`,
+      label: new Intl.DateTimeFormat('es-PY', { month: 'short' }).format(d),
+      income: 0, expense: 0
+    });
+  }
+
+  data.movements.forEach(m => {
+    const key = m.date.slice(0, 7);
+    const entry = months.find(x => x.key === key);
+    if (!entry) return;
+    if (m.type === 'income') entry.income += Number(m.amount) || 0;
+    else if (m.type === 'expense') entry.expense += Number(m.amount) || 0;
+  });
+
+  const max = Math.max(1, ...months.flatMap(m => [m.income, m.expense]));
+
+  chart.innerHTML = months.map(m => {
+    const hIncome = Math.max(3, Math.round((m.income / max) * 100));
+    const hExpense = Math.max(3, Math.round((m.expense / max) * 100));
+    return `
+      <div class="chart-group">
+        <div class="chart-bars">
+          <div class="chart-bar income" style="height:${hIncome}%" title="${money(m.income)}"></div>
+          <div class="chart-bar expense" style="height:${hExpense}%" title="${money(m.expense)}"></div>
+        </div>
+        <div class="chart-label">${m.label}</div>
+      </div>`;
+  }).join('');
+}
+
+/* ============================================================
+   CONFIGURACIÓN: contraseña, respaldo, reset
+============================================================ */
+function setupSettings() {
+  $('#passwordForm')?.addEventListener('submit', handlePasswordChange);
+  $('#exportData')?.addEventListener('click', exportData);
+  $('#importData')?.addEventListener('click', () => $('#importFile').click());
+  $('#importFile')?.addEventListener('change', importData);
+  $('#resetData')?.addEventListener('click', resetData);
+  $('#logoutBtn')?.addEventListener('click', logout);
+  $('#logoutBtn2')?.addEventListener('click', logout);
+}
+
+async function handlePasswordChange(e) {
+  e.preventDefault();
+  const current = $('#currentPassword').value;
+  const next = $('#newPassword').value;
+  const confirm = $('#confirmPassword').value;
+
+  if (!await verifyPassword(current)) {
+    showToast('Contraseña incorrecta', 'La contraseña actual no coincide.', 'error');
+    return;
+  }
+  if (next.length < 4) {
+    showToast('Contraseña corta', 'Debe tener al menos 4 caracteres.', 'error');
+    return;
+  }
+  if (next !== confirm) {
+    showToast('No coinciden', 'La nueva contraseña y su confirmación difieren.', 'error');
+    return;
+  }
+
+  const { hash, salt } = await hashPassword(next);
+  saveAuth({ hash, salt, createdAt: Date.now() });
+  $('#passwordForm').reset();
+  showToast('Contraseña actualizada', 'Tu nueva clave está activa.');
+}
+
+function exportData() {
+  const backup = {
+    app: 'TECNO FS Finanzas',
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    movements: data.movements
+  };
+
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `tecnofs-respaldo-${getTodayISO()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+
+  showToast('Respaldo creado', 'Tus datos fueron descargados.');
+}
+
+function importData(e) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(reader.result);
+      let movements = null;
+
+      if (parsed && Array.isArray(parsed.movements)) movements = parsed.movements;
+      else if (Array.isArray(parsed)) movements = parsed;
+
+      if (!movements) throw new Error('Formato inválido');
+
+      if (!confirm('Esto reemplazará los datos actuales.\n\n¿Querés continuar?')) {
+        e.target.value = '';
+        return;
+      }
+
+      data.movements = movements;
+      saveData();
+      renderEverything();
+      showToast('Datos restaurados', 'El respaldo fue importado correctamente.');
+    } catch (err) {
+      console.error(err);
+      showToast('Respaldo inválido', 'El archivo no es válido.', 'error');
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+function resetData() {
+  if (!confirm('¿ESTÁS SEGURO?\n\nSe eliminarán TODOS los ingresos y egresos.')) return;
+  if (!confirm('Última confirmación:\n\n¿Borrar absolutamente todos los movimientos?')) return;
+
+  data = { movements: [] };
+  saveData();
+  renderEverything();
+  showToast('Datos eliminados', 'Todos los movimientos fueron borrados.');
+}
+
+/* ============================================================
+   RENDER GENERAL + TOAST
+============================================================ */
+function renderEverything() {
+  renderDashboard();
+  renderMovements();
+  renderCalendar();
+  renderReports();
+  if (selectedCalendarDate) renderSelectedDay(selectedCalendarDate);
+}
+
+let toastTimer = null;
+
+function showToast(title, message, type = 'success') {
+  const toast = $('#toast');
+  if (!toast) return;
+
+  $('#toastTitle').textContent = title;
+  $('#toastMessage').textContent = message;
+
+  const icon = toast.querySelector('.toast-icon');
+  if (type === 'error') {
+    icon.textContent = '!';
+    icon.style.background = 'var(--expense)';
+  } else {
+    icon.textContent = '✓';
+    icon.style.background = 'var(--income)';
+  }
+
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+}
+
+/* ============================================================
+   BOOTSTRAP
+============================================================ */
+function setupTopButtons() {
+  $('#newIncome')?.addEventListener('click', () => openIncomeModal());
+  $('#newExpense')?.addEventListener('click', () => openExpenseModal());
+  $('#openIncomeTop')?.addEventListener('click', () => openIncomeModal());
+  $('#openExpenseTop')?.addEventListener('click', () => openExpenseModal());
+  $('#newIncomeMovements')?.addEventListener('click', () => openIncomeModal());
+  $('#newExpenseMovements')?.addEventListener('click', () => openExpenseModal());
+
+  $('#editDetail')?.addEventListener('click', editCurrentDetail);
+  $('#deleteDetail')?.addEventListener('click', deleteCurrentDetail);
+
+  $$('.period-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentPeriod = btn.dataset.period;
+      $$('.period-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderDashboard();
+    });
+  });
+}
+
+function initialize() {
+  loadData();
+
+  setupNavigation();
+  setupTopButtons();
+  setupForms();
+  setupPhotoUpload();
+  setupFilters();
+  setupCalendar();
+  setupReports();
+  setupSettings();
+  setupModalClosing();
+
+  $('#authForm')?.addEventListener('submit', handleAuthSubmit);
+
+  // ¿Sesión ya activa en esta pestaña?
+  if (isSessionActive() && getAuth()) {
+    showApp();
+  } else {
+    showAuthScreen();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initialize);
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(r => console.log('✅ PWA lista', r))
+      .catch(e => console.error('❌ Error PWA', e));
+  });
+}
+</script>
+</body>
+          </html>
