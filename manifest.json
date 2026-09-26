@@ -1,0 +1,26 @@
+{
+  "name": "TECNO FS — Control Financiero",
+  "short_name": "TECNO FS",
+  "description": "Control financiero personal de TECNO FS",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0d2340",
+  "theme_color": "#0d2340",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
